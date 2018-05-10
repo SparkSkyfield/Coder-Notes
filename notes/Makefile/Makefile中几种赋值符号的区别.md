@@ -20,8 +20,12 @@
   
   在这个例子中，y的值将会是 **xyz bar**，而不是 **foo bar** 。  
   
+
+![测试结果一](https://github.com/SparkSkyfield/Coder-Notes/raw/master/notes/resources/makefile_equal_test.PNG)
+   
+
   相信看懂了上面这个例子，就发现原来这是一个坑。平常程序员的理解，代码都是顺序执行的，在给y赋值时，  
-  x的值应该是"foo"，为什么最后变成"xyz"了呢？  
+  x的值应该是"foo"，为什么最后变成"xyz"了呢？   
   
   **make解析makefile的过程，是先将整个makefile展开后，最后再决定变量的值，所以变量的值将会是整个makefile中最后被指定的值。**
 
@@ -43,6 +47,10 @@
 ```
   
   这次y的值将会是 **foo bar**，而不是 **xyz bar**。  
+  
+  
+![测试结果二](https://github.com/SparkSkyfield/Coder-Notes/raw/master/notes/resources/makefile_colon_equal_test.PNG)
+
 
 ###    3. ?=  
   
@@ -63,12 +71,12 @@
   all:
     @echo $(info)
 ```
-这个Makefile是根据一个变量xflag的值给变量info赋值。  
-我们在命令行中给xflag一个值，如果xflag=on，则执行结果是 **"The flag is on!"**。  
   
+  这个Makefile是根据一个变量xflag的值给变量info赋值。  
+  我们在命令行中给xflag一个值，如果xflag=on，则执行结果是 **"The flag is on!"** 。  
+  如果xflag不等于on，或者没有给xflag赋值，则执行结果是 **"The flag is off!"** 。  
   
-如果xflag不等于on，或者没有给xflag赋值，则执行结果是 **"The flag is off!"**。  
-  
+![测试结果三](https://github.com/SparkSkyfield/Coder-Notes/raw/master/notes/resources/makefile_question_equal_test.PNG)
   
 从上面的执行结果来看，当xflag=on时，会走入if分支，给info变量赋值一次。然后再执行到?=赋值语句时，就不会再赋值了。
 
@@ -79,17 +87,27 @@
   ```Makefile
   #plus_equal_test.mk
   
+  xflag=on
   ifeq ($(xflag),on)
-    info = "The flag is on!"  
+    info = abc 
   endif
   
-  info += " -- The flag is off!"
+  info += 123
 
   all:
     @echo $(info)
 
   ```
     
-  执行结果是: **"The flag is on! -- The flag is off!"**。 
-  把变量多次赋值的结果按先后顺序串起来了。
+  执行结果是: **abc 123** 。 
+  
+![测试结果四](https://github.com/SparkSkyfield/Coder-Notes/raw/master/notes/resources/makefile_plus_equal_test.PNG)
+  
+  把变量多次赋值的结果按先后顺序串起来了。  
+  
+  
+  以上四个例子的测试Makefile在这里:  
 
+[测试Makefile](https://github.com/SparkSkyfield/Coder-Notes/raw/master/notes/resources/makefile_eqaul_test.zip)
+  
+  
